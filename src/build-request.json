@@ -1,0 +1,93 @@
+{
+  "kind": "build_request",
+  "title": "Add a simple first-time user onboarding screen",
+  "priority": "normal",
+  "requirements": [
+    {
+      "id": "REQ-9",
+      "text": "Add a simple onboarding screen that introduces the app and guides first-time users to the main tools.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2",
+          "msg-3"
+        ],
+        "quotes": [
+          "If you want, we can add a simple onboarding screen next.",
+          "Do it"
+        ]
+      },
+      "acceptanceCriteria": [
+        "A new onboarding UI exists (page or modal) that briefly explains what the app does and highlights the key sections (Generators, Trends, Library, Calendar).",
+        "All user-facing onboarding text is in English.",
+        "The onboarding UI includes clear primary and secondary actions (e.g., “Start Creating” and “Skip for now”)."
+      ]
+    },
+    {
+      "id": "REQ-10",
+      "text": "Show the onboarding screen only for first-time users after they are authenticated and have completed profile setup; do not show it again once dismissed/completed.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2",
+          "msg-3"
+        ],
+        "quotes": [
+          "add a simple onboarding screen next.",
+          "Do it"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Unauthenticated users do not see the onboarding screen.",
+        "Users who still need to complete ProfileSetupModal do not see the onboarding screen until after the profile is saved and the profile is available (i.e., userProfile is not null).",
+        "After the user completes or skips onboarding, the onboarding screen does not appear again on subsequent visits (persisted via browser storage).",
+        "There is an obvious way to re-open onboarding (e.g., a small “Onboarding” link/button in an existing authenticated area such as a settings/help spot or footer), or the completion state can be reset by clearing browser storage (document which key is used in code)."
+      ]
+    },
+    {
+      "id": "REQ-11",
+      "text": "Wire onboarding navigation into the existing TanStack Router flow so the user can proceed to core app areas (at minimum, Generators).",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2",
+          "msg-3"
+        ],
+        "quotes": [
+          "add a simple onboarding screen next.",
+          "Do it"
+        ]
+      },
+      "acceptanceCriteria": [
+        "If implemented as a route: a new route is registered in the router (frontend/src/App.tsx) and can be navigated to without errors.",
+        "Onboarding primary action takes the user to /generators.",
+        "Onboarding skip/done action also lands the user in a sensible authenticated destination (at minimum /generators).",
+        "No changes are made to immutable frontend paths (identity/actor hooks and shadcn ui sources)."
+      ]
+    }
+  ],
+  "constraints": [
+    "Do not edit files under frontend/src/components/ui (compose existing shadcn components instead).",
+    "Do not edit immutable hook files: frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useInternetIdentity.tsx, frontend/src/hooks/useActor.ts, frontend/src/main.tsx.",
+    "Keep all changes within the existing React + TypeScript + Tailwind + React Query + TanStack Router stack."
+  ],
+  "nonGoals": [
+    "Do not add new backend storage or Motoko state for onboarding completion.",
+    "Do not implement email capture, notifications, payments, or any third-party integrations as part of onboarding.",
+    "Do not redesign existing generators/trends/library/calendar features beyond what is necessary to link from onboarding."
+  ],
+  "imageRequirements": {
+    "required": [],
+    "edits": []
+  },
+  "userProfileUpdate": {
+    "goalsToAdd": [],
+    "goalsToRemove": [],
+    "preferencesToAdd": [],
+    "preferencesToRemove": [],
+    "miscToAdd": [],
+    "miscToRemove": [],
+    "fieldsToSet": {},
+    "fieldsToDelete": []
+  }
+}

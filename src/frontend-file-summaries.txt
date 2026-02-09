@@ -1,0 +1,15 @@
+{
+  "frontend/src/lib/reelIdeasGenerator.ts": "Generates structured Instagram reel ideas with templates, properly importing Difficulty as a value (enum) and mapping style strings to ContentStyle backend types with required null properties.",
+  "frontend/src/lib/hookGenerator.ts": "Generates attention-grabbing hooks across multiple categories with proper HookType mapping including required null properties and Difficulty imported as enum value.",
+  "frontend/src/lib/captionGenerator.ts": "Creates caption variants with emoji density control and hashtag generation, properly typed for backend StoryIdea structure with required null properties.",
+  "frontend/src/lib/trendGenerator.ts": "Generates trend candidates from keywords with scoring and proper TrendCategory type mapping including required null properties and Difficulty imported as enum value.",
+  "frontend/src/components/generators/ScriptGenerator.tsx": "Script generator producing structured scripts with hook, setup, payoff, CTA sections plus editing suggestions, using proper backend types with Difficulty imported as enum value.",
+  "frontend/src/components/calendar/CalendarEntryDialog.tsx": "Dialog for adding/editing calendar entries with date, title, platform, status selection, using PostStatus enum directly from backend.",
+  "frontend/src/pages/CalendarPage.tsx": "Content calendar with month and list views, allowing users to schedule and manage content posts with proper PostStatus enum handling.",
+  "frontend/src/lib/onboardingStorage.ts": "Browser storage helpers for persisting onboarding completion state with get/set/reset functions and documented storage key for manual reset.",
+  "frontend/src/components/onboarding/OnboardingSectionList.tsx": "Presentational component that renders the four key app sections (Generators, Trends, Library, Calendar) with icons and descriptions in a responsive grid layout.",
+  "frontend/src/pages/OnboardingPage.tsx": "Onboarding page that welcomes users, highlights key features using OnboardingSectionList, and provides primary \"Start Creating\" and secondary \"Skip for now\" actions that both mark onboarding complete and navigate to /generators.",
+  "frontend/src/components/onboarding/OnboardingAutoLauncher.tsx": "Auto-launcher component that redirects first-time authenticated users with completed profiles to the onboarding page if they haven't completed onboarding yet.",
+  "frontend/src/App.tsx": "Main app component with TanStack Router setup including all routes (landing, onboarding, generators, library, calendar, trends), ProfileSetupModal, and OnboardingAutoLauncher mounted in root layout.",
+  "frontend/src/components/layout/AppLayout.tsx": "App layout component with header navigation, user profile display, login button, and footer that includes an authenticated-only \"Onboarding\" link for re-accessing the onboarding flow."
+}

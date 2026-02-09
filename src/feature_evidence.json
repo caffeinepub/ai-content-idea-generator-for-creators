@@ -1,0 +1,67 @@
+{
+  "kind": "feature_evidence_report",
+  "features": [
+    {
+      "featureId": "feature-add-a-simple-onboarding-screen-that-introduces-the-app-and-guides-first-time-users-to-the-main-tools",
+      "featureTitle": "Add a simple onboarding screen that introduces the app and guides first-time users to the main tools.",
+      "files": [
+        "frontend/src/components/onboarding/OnboardingSectionList.tsx",
+        "frontend/src/pages/OnboardingPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-9"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-show-the-onboarding-screen-only-for-first-time-users-after-they-are-authenticated-and-have-completed-profile-setup-do-not-show-it-again-once-dismissed-completed",
+      "featureTitle": "Show the onboarding screen only for first-time users after they are authenticated and have completed profile setup; do not show it again once dismissed/completed.",
+      "files": [
+        "frontend/src/components/layout/AppLayout.tsx",
+        "frontend/src/components/onboarding/OnboardingAutoLauncher.tsx",
+        "frontend/src/lib/onboardingStorage.ts",
+        "frontend/src/pages/OnboardingPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-10"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-wire-onboarding-navigation-into-the-existing-tanstack-router-flow-so-the-user-can-proceed-to-core-app-areas-at-minimum-generators",
+      "featureTitle": "Wire onboarding navigation into the existing TanStack Router flow so the user can proceed to core app areas (at minimum, Generators).",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/pages/OnboardingPage.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-11"
+      ],
+      "confidence": "high"
+    }
+  ]
+}

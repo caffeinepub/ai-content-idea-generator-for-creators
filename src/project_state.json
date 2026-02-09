@@ -1,0 +1,146 @@
+{
+  "schemaVersion": "1.0.0",
+  "projectStateVersion": 5,
+  "summary": "Build an AI Content Idea Generator for creators focused on trending content, including reel idea generation, hooks/captions, content planning, trend detection, and scripting/editing suggestions.",
+  "architectural_notes": [],
+  "known_issues": [],
+  "isFixRequest": false,
+  "existing_features": [
+    {
+      "id": "feature-implement-internet-identity-based-creator-workspace-with-per-user-saved-items-ideas-hooks-captions-scripts-calendar-entries-and-saved-trends-persisted-in-the-motoko-canister-and-scoped-to-the-authenticated-principal",
+      "title": "Implement Internet Identity-based creator workspace with per-user saved items (ideas, hooks, captions, scripts, calendar entries, and saved trends) persisted in the Motoko canister and scoped to the authenticated principal.",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-an-instagram-reel-ideas-generator-ui-where-users-specify-niche-topic-target-audience-content-style-educational-entertainment-storytime-etc-desired-length-and-call-to-action-generate-a-set-of-reel-ideas-with-structured-fields-title-premise-key-beats-suggested-b-roll-on-screen-text-cta",
+      "title": "Add an Instagram Reel Ideas generator UI where users specify niche/topic, target audience, content style (educational/entertainment/storytime/etc.), desired length, and call-to-action; generate a set of reel ideas with structured fields (title, premise, key beats, suggested b-roll, on-screen text, CTA).",
+      "reqIds": [
+        "REQ-2"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-hook-generator-that-produces-multiple-hook-options-tailored-to-the-selected-niche-and-tone-with-categories-curiosity-contrarian-authority-story-quick-win-and-length-variants-short-medium-long",
+      "title": "Add a Hook generator that produces multiple hook options tailored to the selected niche and tone, with categories (curiosity, contrarian, authority, story, quick-win) and length variants (short/medium/long).",
+      "reqIds": [
+        "REQ-3"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-viral-caption-generator-that-produces-multiple-caption-options-based-on-an-input-idea-hook-with-optional-keywords-emoji-density-selection-and-hashtag-generation-include-variants-for-different-intents-value-storytelling-cta-heavy",
+      "title": "Add a Viral Caption generator that produces multiple caption options based on an input idea/hook, with optional keywords, emoji density selection, and hashtag generation; include variants for different intents (value, storytelling, CTA-heavy).",
+      "reqIds": [
+        "REQ-4"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-an-ai-script-editing-suggestions-generator-that-outputs-a-reel-script-in-sections-hook-setup-payoff-cta-plus-a-separate-list-of-editing-suggestions-cuts-pacing-captions-style-b-roll-sound-music-cues",
+      "title": "Implement an AI script + editing suggestions generator that outputs a reel script in sections (hook, setup, payoff, CTA) plus a separate list of editing suggestions (cuts, pacing, captions style, b-roll, sound/music cues).",
+      "reqIds": [
+        "REQ-5"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-content-calendar-feature-that-lets-users-schedule-saved-ideas-scripts-onto-dates-view-by-month-week-and-track-basic-status-planned-drafted-posted-with-notes",
+      "title": "Add a Content Calendar feature that lets users schedule saved ideas/scripts onto dates, view by month/week, and track basic status (planned, drafted, posted) with notes.",
+      "reqIds": [
+        "REQ-6"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-trending-topic-detector-feature-that-allows-users-to-build-a-trend-watchlist-by-entering-keywords-topics-and-then-generates-a-ranked-list-of-trend-candidates-using-on-app-scoring-recency-input-relevance-to-niche-novelty-and-highlights-why-each-trend-is-suggested",
+      "title": "Add a Trending Topic detector feature that allows users to build a trend watchlist by entering keywords/topics and then generates a ranked list of “trend candidates” using on-app scoring (recency input, relevance to niche, novelty) and highlights why each trend is suggested.",
+      "reqIds": [
+        "REQ-7"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-create-a-cohesive-modern-visual-theme-for-a-creator-focused-trending-tool-distinct-color-palette-typography-scale-spacing-and-component-styling-and-apply-it-consistently-across-all-pages-and-components",
+      "title": "Create a cohesive, modern visual theme for a creator-focused “trending” tool (distinct color palette, typography scale, spacing, and component styling) and apply it consistently across all pages and components.",
+      "reqIds": [
+        "REQ-8"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-simple-onboarding-screen-that-introduces-the-app-and-guides-first-time-users-to-the-main-tools",
+      "title": "Add a simple onboarding screen that introduces the app and guides first-time users to the main tools.",
+      "reqIds": [
+        "REQ-9"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-show-the-onboarding-screen-only-for-first-time-users-after-they-are-authenticated-and-have-completed-profile-setup-do-not-show-it-again-once-dismissed-completed",
+      "title": "Show the onboarding screen only for first-time users after they are authenticated and have completed profile setup; do not show it again once dismissed/completed.",
+      "reqIds": [
+        "REQ-10"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-wire-onboarding-navigation-into-the-existing-tanstack-router-flow-so-the-user-can-proceed-to-core-app-areas-at-minimum-generators",
+      "title": "Wire onboarding navigation into the existing TanStack Router flow so the user can proceed to core app areas (at minimum, Generators).",
+      "reqIds": [
+        "REQ-11"
+      ],
+      "version": 1
+    }
+  ],
+  "new_feature_requests": [
+    {
+      "id": "AR-1",
+      "summary": "Instagram Reel ideas generator",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-2",
+      "summary": "Viral caption generator",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-3",
+      "summary": "Hook generator",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-4",
+      "summary": "Content calendar for planning and scheduling ideas",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-5",
+      "summary": "Trending topic detector",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-6",
+      "summary": "AI script generator with editing suggestions",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-7",
+      "summary": "Add a simple onboarding screen for first-time users",
+      "reqIds": [],
+      "status": "pending"
+    }
+  ],
+  "gameProjectType": "none",
+  "projectName": "AI Content Idea Generator for Creators",
+  "clarification_mode": "instant",
+  "clarification_rounds": 0
+}

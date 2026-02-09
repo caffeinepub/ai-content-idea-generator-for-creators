@@ -1,0 +1,75 @@
+{
+  "kind": "coverage_report",
+  "version": "1.0",
+  "generatedAt": "2026-02-09T17:13:59.597Z",
+  "sources": {
+    "buildRequest": true,
+    "implementationPlan": true
+  },
+  "requirements": {
+    "total": 3,
+    "implemented": 3,
+    "items": [
+      {
+        "id": "REQ-10",
+        "summary": "Show the onboarding screen only for first-time users after they are authenticated and have completed profile setup; do not show it again once dismissed/completed.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/lib/onboardingStorage.ts",
+          "frontend/src/components/onboarding/OnboardingAutoLauncher.tsx",
+          "frontend/src/components/layout/AppLayout.tsx",
+          "frontend/src/pages/OnboardingPage.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/lib/onboardingStorage.ts",
+          "frontend/src/components/onboarding/OnboardingAutoLauncher.tsx",
+          "frontend/src/components/layout/AppLayout.tsx",
+          "frontend/src/pages/OnboardingPage.tsx"
+        ]
+      },
+      {
+        "id": "REQ-11",
+        "summary": "Wire onboarding navigation into the existing TanStack Router flow so the user can proceed to core app areas (at minimum, Generators).",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/App.tsx",
+          "frontend/src/pages/OnboardingPage.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/App.tsx",
+          "frontend/src/pages/OnboardingPage.tsx"
+        ]
+      },
+      {
+        "id": "REQ-9",
+        "summary": "Add a simple onboarding screen that introduces the app and guides first-time users to the main tools.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/pages/OnboardingPage.tsx",
+          "frontend/src/components/onboarding/OnboardingSectionList.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/pages/OnboardingPage.tsx",
+          "frontend/src/components/onboarding/OnboardingSectionList.tsx"
+        ]
+      }
+    ]
+  },
+  "changedFiles": [
+    "build-request.json",
+    "build-template/README.md",
+    "feature_evidence.json",
+    "frontend-file-summaries.txt",
+    "frontend-implementation-plan.json",
+    "frontend/src/App.tsx",
+    "frontend/src/components/layout/AppLayout.tsx",
+    "frontend/src/components/onboarding/OnboardingAutoLauncher.tsx",
+    "frontend/src/components/onboarding/OnboardingSectionList.tsx",
+    "frontend/src/lib/onboardingStorage.ts",
+    "frontend/src/pages/OnboardingPage.tsx",
+    "project_state.json",
+    "scratch/component-selection.json",
+    "spec.md",
+    "spec_vs_diff_report.json"
+  ]
+}

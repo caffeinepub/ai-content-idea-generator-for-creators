@@ -1,0 +1,82 @@
+{
+  "kind": "implementation_plan",
+  "version": "1.0",
+  "title": "First-time user onboarding (route + persistence + navigation)",
+  "requirements": [
+    {
+      "id": "REQ-9",
+      "summary": "Create an onboarding UI that introduces the app and highlights Generators, Trends, Library, and Calendar with clear primary/secondary actions.",
+      "acceptanceCriteria": [
+        "A new onboarding UI exists (page or modal) that briefly explains what the app does and highlights the key sections (Generators, Trends, Library, Calendar).",
+        "All user-facing onboarding text is in English.",
+        "The onboarding UI includes clear primary and secondary actions (e.g., “Start Creating” and “Skip for now”)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/OnboardingPage.tsx",
+          "operation": "create",
+          "description": "Add a dedicated onboarding page UI using existing shadcn/ui primitives (compose Card/Button/etc; do not modify files under frontend/src/components/ui). Include English copy that explains the app and highlights Generators/Trends/Library/Calendar, plus clear primary (e.g., Start Creating) and secondary (e.g., Skip for now) actions. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/onboarding/OnboardingSectionList.tsx",
+          "operation": "create",
+          "description": "Create a small presentational component used by OnboardingPage to render the four key sections (Generators, Trends, Library, Calendar) consistently (icons/labels/descriptions) using existing shadcn/ui components. Verify the component's usage instructions before implementing."
+        }
+      ]
+    },
+    {
+      "id": "REQ-10",
+      "summary": "Gate onboarding to first-time authenticated users only after profile setup, persist completion in browser storage, and provide a way to reopen it.",
+      "acceptanceCriteria": [
+        "Unauthenticated users do not see the onboarding screen.",
+        "Users who still need to complete ProfileSetupModal do not see the onboarding screen until after the profile is saved and the profile is available (i.e., userProfile is not null).",
+        "After the user completes or skips onboarding, the onboarding screen does not appear again on subsequent visits (persisted via browser storage).",
+        "There is an obvious way to re-open onboarding (e.g., a small “Onboarding” link/button in an existing authenticated area such as a settings/help spot or footer), or the completion state can be reset by clearing browser storage (document which key is used in code)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/lib/onboardingStorage.ts",
+          "operation": "create",
+          "description": "Implement local browser storage helpers for onboarding completion (get/set/reset). Document the exact storage key used in code comments (for manual reset via clearing browser storage) and keep logic frontend-only (no backend state)."
+        },
+        {
+          "path": "frontend/src/components/onboarding/OnboardingAutoLauncher.tsx",
+          "operation": "create",
+          "description": "Add a small component that uses the app's auth/profile state (useCurrentUser from the authorization system) to automatically send first-time users to onboarding only when: authenticated, profile is fetched, and userProfile is not null, and onboarding is not yet completed. Ensure it does nothing for unauthenticated users or while ProfileSetupModal should be shown. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/layout/AppLayout.tsx",
+          "operation": "modify",
+          "description": "Add an authenticated-only, unobtrusive 'Onboarding' link/button in an existing authenticated area (e.g., footer) that navigates to the onboarding route to re-open onboarding. Keep public layout accessible and do not require onboarding to access the link target beyond existing auth/profile gating."
+        },
+        {
+          "path": "frontend/src/pages/OnboardingPage.tsx",
+          "operation": "modify",
+          "description": "Wire the page actions to set onboarding completion in browser storage on 'Start Creating' and 'Skip for now', then navigate to the authenticated destination. Include an optional 'Reset onboarding' affordance only if appropriate for the UI, otherwise rely on documented browser storage key reset."
+        }
+      ]
+    },
+    {
+      "id": "REQ-11",
+      "summary": "Register onboarding in TanStack Router and ensure actions navigate to /generators without touching immutable paths.",
+      "acceptanceCriteria": [
+        "If implemented as a route: a new route is registered in the router (frontend/src/App.tsx) and can be navigated to without errors.",
+        "Onboarding primary action takes the user to /generators.",
+        "Onboarding skip/done action also lands the user in a sensible authenticated destination (at minimum /generators).",
+        "No changes are made to immutable frontend paths (identity/actor hooks and shadcn ui sources)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Register a new TanStack Router route (e.g., /onboarding) and wrap it in AuthGuard so unauthenticated users never see it. Also mount the OnboardingAutoLauncher in the root layout so eligible first-time users are directed to onboarding after profile setup completes. Use the existing authorization flow (AuthGuard/useCurrentUser) and do not change immutable hook files or shadcn ui sources. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/OnboardingPage.tsx",
+          "operation": "modify",
+          "description": "Ensure both primary and secondary actions navigate to /generators via TanStack Router navigation, and that the route renders without errors when navigated to directly (while still protected by AuthGuard + profile gating)."
+        }
+      ]
+    }
+  ]
+}
