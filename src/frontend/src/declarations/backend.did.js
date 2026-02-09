@@ -13,6 +13,30 @@ export const UserRole = IDL.Variant({
   'user' : IDL.Null,
   'guest' : IDL.Null,
 });
+export const MonetizationOffer = IDL.Record({
+  'id' : IDL.Nat,
+  'cta' : IDL.Text,
+  'title' : IDL.Text,
+  'targetCustomer' : IDL.Text,
+  'createdAt' : IDL.Int,
+  'lastUpdated' : IDL.Int,
+  'priceRange' : IDL.Text,
+  'deliverables' : IDL.Vec(IDL.Text),
+  'fulfillmentNotes' : IDL.Text,
+  'problemSolved' : IDL.Text,
+});
+export const BrandPitch = IDL.Record({
+  'id' : IDL.Nat,
+  'followUpMessages' : IDL.Vec(IDL.Text),
+  'shortPitchDM' : IDL.Text,
+  'createdAt' : IDL.Int,
+  'lastUpdated' : IDL.Int,
+  'brandName' : IDL.Text,
+  'desiredOutcome' : IDL.Text,
+  'emailPitch' : IDL.Text,
+  'collaborationType' : IDL.Text,
+  'product' : IDL.Text,
+});
 export const ContentCategory = IDL.Variant({
   'trend' : IDL.Null,
   'challenge' : IDL.Null,
@@ -49,6 +73,41 @@ export const UserProfile = IDL.Record({
   'goals' : IDL.Text,
   'niche' : IDL.Text,
   'postingFrequency' : IDL.Nat,
+});
+export const MediaKit = IDL.Record({
+  'id' : IDL.Nat,
+  'contentPillars' : IDL.Vec(IDL.Text),
+  'handles' : IDL.Vec(IDL.Text),
+  'createdAt' : IDL.Int,
+  'lastUpdated' : IDL.Int,
+  'contentNiches' : IDL.Vec(IDL.Text),
+  'contactEmail' : IDL.Text,
+  'userProfile' : UserProfile,
+  'audienceDescription' : IDL.Text,
+  'sampleDeliverables' : IDL.Vec(IDL.Text),
+});
+export const RevenueSourceType = IDL.Variant({
+  'service' : IDL.Null,
+  'other' : IDL.Text,
+  'brand' : IDL.Null,
+  'affiliate' : IDL.Null,
+  'product' : IDL.Null,
+});
+export const RevenueEntry = IDL.Record({
+  'id' : IDL.Nat,
+  'date' : IDL.Text,
+  'createdAt' : IDL.Int,
+  'sourceType' : RevenueSourceType,
+  'notes' : IDL.Text,
+  'amount' : IDL.Float64,
+});
+export const RevenueGoal = IDL.Record({
+  'id' : IDL.Nat,
+  'month' : IDL.Text,
+  'goalAmount' : IDL.Float64,
+  'achievedAmount' : IDL.Float64,
+  'createdAt' : IDL.Int,
+  'lastUpdated' : IDL.Int,
 });
 export const PostStatus = IDL.Variant({
   'scheduled' : IDL.Null,
@@ -178,26 +237,96 @@ export const VideoIdea = IDL.Record({
 
 export const idlService = IDL.Service({
   '_initializeAccessControlWithSecret' : IDL.Func([IDL.Text], [], []),
+  'addCredits' : IDL.Func([IDL.Principal, IDL.Nat], [], []),
   'assignCallerUserRole' : IDL.Func([IDL.Principal, UserRole], [], []),
+  'getAllMonetizationOffers' : IDL.Func(
+      [IDL.Principal],
+      [IDL.Vec(MonetizationOffer)],
+      ['query'],
+    ),
+  'getBrandPitch' : IDL.Func(
+      [IDL.Principal, IDL.Nat],
+      [IDL.Opt(BrandPitch)],
+      ['query'],
+    ),
+  'getBrandPitchesForUser' : IDL.Func(
+      [IDL.Principal],
+      [IDL.Vec(BrandPitch)],
+      ['query'],
+    ),
   'getCallerUserProfile' : IDL.Func([], [IDL.Opt(UserProfile)], ['query']),
   'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
+  'getCredits' : IDL.Func([], [IDL.Nat], ['query']),
+  'getMediaKit' : IDL.Func(
+      [IDL.Principal, IDL.Nat],
+      [IDL.Opt(MediaKit)],
+      ['query'],
+    ),
+  'getMediaKitsForUser' : IDL.Func(
+      [IDL.Principal],
+      [IDL.Vec(MediaKit)],
+      ['query'],
+    ),
+  'getMonetizationOffer' : IDL.Func(
+      [IDL.Principal, IDL.Nat],
+      [IDL.Opt(MonetizationOffer)],
+      ['query'],
+    ),
+  'getMonetizationOffersForUser' : IDL.Func(
+      [IDL.Principal],
+      [IDL.Vec(MonetizationOffer)],
+      ['query'],
+    ),
+  'getRevenueEntry' : IDL.Func(
+      [IDL.Principal, IDL.Nat],
+      [IDL.Opt(RevenueEntry)],
+      ['query'],
+    ),
+  'getRevenueGoal' : IDL.Func(
+      [IDL.Principal, IDL.Nat],
+      [IDL.Opt(RevenueGoal)],
+      ['query'],
+    ),
+  'getRevenueGoalsForUser' : IDL.Func(
+      [IDL.Principal],
+      [IDL.Vec(RevenueGoal)],
+      ['query'],
+    ),
+  'getUserBrandPitches' : IDL.Func([], [IDL.Vec(BrandPitch)], ['query']),
   'getUserCalendarPosts' : IDL.Func([], [IDL.Vec(CalendarPost)], ['query']),
+  'getUserMediaKits' : IDL.Func([], [IDL.Vec(MediaKit)], ['query']),
+  'getUserMonetizationOffers' : IDL.Func(
+      [],
+      [IDL.Vec(MonetizationOffer)],
+      ['query'],
+    ),
   'getUserProfile' : IDL.Func(
       [IDL.Principal],
       [IDL.Opt(UserProfile)],
       ['query'],
     ),
+  'getUserRevenueEntries' : IDL.Func([], [IDL.Vec(RevenueEntry)], ['query']),
+  'getUserRevenueGoals' : IDL.Func([], [IDL.Vec(RevenueGoal)], ['query']),
   'getUserStoryIdeas' : IDL.Func([], [IDL.Vec(StoryIdea)], ['query']),
   'getUserTrends' : IDL.Func([], [IDL.Vec(Trend)], ['query']),
   'getUserVideoHooks' : IDL.Func([], [IDL.Vec(VideoHook)], ['query']),
   'getUserVideoIdeas' : IDL.Func([], [IDL.Vec(VideoIdea)], ['query']),
   'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
+  'saveBrandPitch' : IDL.Func([BrandPitch], [], []),
   'saveCalendarPost' : IDL.Func([CalendarPost], [], []),
   'saveCallerUserProfile' : IDL.Func([UserProfile], [], []),
+  'saveMediaKit' : IDL.Func([MediaKit], [], []),
+  'saveMonetizationOffer' : IDL.Func([MonetizationOffer], [], []),
+  'saveRevenueEntry' : IDL.Func([RevenueEntry], [], []),
+  'saveRevenueGoal' : IDL.Func([RevenueGoal], [], []),
   'saveStoryIdea' : IDL.Func([StoryIdea], [], []),
   'saveTrend' : IDL.Func([Trend], [], []),
   'saveVideoHook' : IDL.Func([VideoHook], [], []),
   'saveVideoIdea' : IDL.Func([VideoIdea], [], []),
+  'updateBrandPitch' : IDL.Func([IDL.Nat, BrandPitch], [], []),
+  'updateMediaKit' : IDL.Func([IDL.Nat, MediaKit], [], []),
+  'updateMonetizationOffer' : IDL.Func([IDL.Nat, MonetizationOffer], [], []),
+  'updateRevenueGoal' : IDL.Func([IDL.Nat, RevenueGoal], [], []),
 });
 
 export const idlInitArgs = [];
@@ -207,6 +336,30 @@ export const idlFactory = ({ IDL }) => {
     'admin' : IDL.Null,
     'user' : IDL.Null,
     'guest' : IDL.Null,
+  });
+  const MonetizationOffer = IDL.Record({
+    'id' : IDL.Nat,
+    'cta' : IDL.Text,
+    'title' : IDL.Text,
+    'targetCustomer' : IDL.Text,
+    'createdAt' : IDL.Int,
+    'lastUpdated' : IDL.Int,
+    'priceRange' : IDL.Text,
+    'deliverables' : IDL.Vec(IDL.Text),
+    'fulfillmentNotes' : IDL.Text,
+    'problemSolved' : IDL.Text,
+  });
+  const BrandPitch = IDL.Record({
+    'id' : IDL.Nat,
+    'followUpMessages' : IDL.Vec(IDL.Text),
+    'shortPitchDM' : IDL.Text,
+    'createdAt' : IDL.Int,
+    'lastUpdated' : IDL.Int,
+    'brandName' : IDL.Text,
+    'desiredOutcome' : IDL.Text,
+    'emailPitch' : IDL.Text,
+    'collaborationType' : IDL.Text,
+    'product' : IDL.Text,
   });
   const ContentCategory = IDL.Variant({
     'trend' : IDL.Null,
@@ -244,6 +397,41 @@ export const idlFactory = ({ IDL }) => {
     'goals' : IDL.Text,
     'niche' : IDL.Text,
     'postingFrequency' : IDL.Nat,
+  });
+  const MediaKit = IDL.Record({
+    'id' : IDL.Nat,
+    'contentPillars' : IDL.Vec(IDL.Text),
+    'handles' : IDL.Vec(IDL.Text),
+    'createdAt' : IDL.Int,
+    'lastUpdated' : IDL.Int,
+    'contentNiches' : IDL.Vec(IDL.Text),
+    'contactEmail' : IDL.Text,
+    'userProfile' : UserProfile,
+    'audienceDescription' : IDL.Text,
+    'sampleDeliverables' : IDL.Vec(IDL.Text),
+  });
+  const RevenueSourceType = IDL.Variant({
+    'service' : IDL.Null,
+    'other' : IDL.Text,
+    'brand' : IDL.Null,
+    'affiliate' : IDL.Null,
+    'product' : IDL.Null,
+  });
+  const RevenueEntry = IDL.Record({
+    'id' : IDL.Nat,
+    'date' : IDL.Text,
+    'createdAt' : IDL.Int,
+    'sourceType' : RevenueSourceType,
+    'notes' : IDL.Text,
+    'amount' : IDL.Float64,
+  });
+  const RevenueGoal = IDL.Record({
+    'id' : IDL.Nat,
+    'month' : IDL.Text,
+    'goalAmount' : IDL.Float64,
+    'achievedAmount' : IDL.Float64,
+    'createdAt' : IDL.Int,
+    'lastUpdated' : IDL.Int,
   });
   const PostStatus = IDL.Variant({
     'scheduled' : IDL.Null,
@@ -373,26 +561,96 @@ export const idlFactory = ({ IDL }) => {
   
   return IDL.Service({
     '_initializeAccessControlWithSecret' : IDL.Func([IDL.Text], [], []),
+    'addCredits' : IDL.Func([IDL.Principal, IDL.Nat], [], []),
     'assignCallerUserRole' : IDL.Func([IDL.Principal, UserRole], [], []),
+    'getAllMonetizationOffers' : IDL.Func(
+        [IDL.Principal],
+        [IDL.Vec(MonetizationOffer)],
+        ['query'],
+      ),
+    'getBrandPitch' : IDL.Func(
+        [IDL.Principal, IDL.Nat],
+        [IDL.Opt(BrandPitch)],
+        ['query'],
+      ),
+    'getBrandPitchesForUser' : IDL.Func(
+        [IDL.Principal],
+        [IDL.Vec(BrandPitch)],
+        ['query'],
+      ),
     'getCallerUserProfile' : IDL.Func([], [IDL.Opt(UserProfile)], ['query']),
     'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
+    'getCredits' : IDL.Func([], [IDL.Nat], ['query']),
+    'getMediaKit' : IDL.Func(
+        [IDL.Principal, IDL.Nat],
+        [IDL.Opt(MediaKit)],
+        ['query'],
+      ),
+    'getMediaKitsForUser' : IDL.Func(
+        [IDL.Principal],
+        [IDL.Vec(MediaKit)],
+        ['query'],
+      ),
+    'getMonetizationOffer' : IDL.Func(
+        [IDL.Principal, IDL.Nat],
+        [IDL.Opt(MonetizationOffer)],
+        ['query'],
+      ),
+    'getMonetizationOffersForUser' : IDL.Func(
+        [IDL.Principal],
+        [IDL.Vec(MonetizationOffer)],
+        ['query'],
+      ),
+    'getRevenueEntry' : IDL.Func(
+        [IDL.Principal, IDL.Nat],
+        [IDL.Opt(RevenueEntry)],
+        ['query'],
+      ),
+    'getRevenueGoal' : IDL.Func(
+        [IDL.Principal, IDL.Nat],
+        [IDL.Opt(RevenueGoal)],
+        ['query'],
+      ),
+    'getRevenueGoalsForUser' : IDL.Func(
+        [IDL.Principal],
+        [IDL.Vec(RevenueGoal)],
+        ['query'],
+      ),
+    'getUserBrandPitches' : IDL.Func([], [IDL.Vec(BrandPitch)], ['query']),
     'getUserCalendarPosts' : IDL.Func([], [IDL.Vec(CalendarPost)], ['query']),
+    'getUserMediaKits' : IDL.Func([], [IDL.Vec(MediaKit)], ['query']),
+    'getUserMonetizationOffers' : IDL.Func(
+        [],
+        [IDL.Vec(MonetizationOffer)],
+        ['query'],
+      ),
     'getUserProfile' : IDL.Func(
         [IDL.Principal],
         [IDL.Opt(UserProfile)],
         ['query'],
       ),
+    'getUserRevenueEntries' : IDL.Func([], [IDL.Vec(RevenueEntry)], ['query']),
+    'getUserRevenueGoals' : IDL.Func([], [IDL.Vec(RevenueGoal)], ['query']),
     'getUserStoryIdeas' : IDL.Func([], [IDL.Vec(StoryIdea)], ['query']),
     'getUserTrends' : IDL.Func([], [IDL.Vec(Trend)], ['query']),
     'getUserVideoHooks' : IDL.Func([], [IDL.Vec(VideoHook)], ['query']),
     'getUserVideoIdeas' : IDL.Func([], [IDL.Vec(VideoIdea)], ['query']),
     'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
+    'saveBrandPitch' : IDL.Func([BrandPitch], [], []),
     'saveCalendarPost' : IDL.Func([CalendarPost], [], []),
     'saveCallerUserProfile' : IDL.Func([UserProfile], [], []),
+    'saveMediaKit' : IDL.Func([MediaKit], [], []),
+    'saveMonetizationOffer' : IDL.Func([MonetizationOffer], [], []),
+    'saveRevenueEntry' : IDL.Func([RevenueEntry], [], []),
+    'saveRevenueGoal' : IDL.Func([RevenueGoal], [], []),
     'saveStoryIdea' : IDL.Func([StoryIdea], [], []),
     'saveTrend' : IDL.Func([Trend], [], []),
     'saveVideoHook' : IDL.Func([VideoHook], [], []),
     'saveVideoIdea' : IDL.Func([VideoIdea], [], []),
+    'updateBrandPitch' : IDL.Func([IDL.Nat, BrandPitch], [], []),
+    'updateMediaKit' : IDL.Func([IDL.Nat, MediaKit], [], []),
+    'updateMonetizationOffer' : IDL.Func([IDL.Nat, MonetizationOffer], [], []),
+    'updateRevenueGoal' : IDL.Func([IDL.Nat, RevenueGoal], [], []),
   });
 };
 

@@ -2,7 +2,7 @@ import { ReactNode } from 'react';
 import { Link, useRouterState } from '@tanstack/react-router';
 import { Button } from '@/components/ui/button';
 import LoginButton from '../auth/LoginButton';
-import { Sparkles, Library, Calendar, TrendingUp, Wand2, Info } from 'lucide-react';
+import { Sparkles, Library, Calendar, TrendingUp, Wand2, Info, Settings, DollarSign } from 'lucide-react';
 import { useCurrentUser } from '../../hooks/useCurrentUser';
 
 interface AppLayoutProps {
@@ -67,6 +67,26 @@ export default function AppLayout({ children }: AppLayoutProps) {
                 <Link to="/trends">
                   <TrendingUp className="h-4 w-4" />
                   Trends
+                </Link>
+              </Button>
+              <Button
+                asChild
+                variant={isActive('/monetization') ? 'secondary' : 'ghost'}
+                className="gap-2"
+              >
+                <Link to="/monetization">
+                  <DollarSign className="h-4 w-4" />
+                  Monetization
+                </Link>
+              </Button>
+              <Button
+                asChild
+                variant={isActive('/settings') ? 'secondary' : 'ghost'}
+                className="gap-2"
+              >
+                <Link to="/settings">
+                  <Settings className="h-4 w-4" />
+                  Settings
                 </Link>
               </Button>
             </nav>

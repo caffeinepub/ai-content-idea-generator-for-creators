@@ -1,13 +1,13 @@
 # Specification
 
 ## Summary
-**Goal:** Add a simple first-time user onboarding experience that introduces the app and routes authenticated users into the main tools.
+**Goal:** Add non-payment monetization features by letting users earn unlock credits via an in-app “watch ad” flow, gating at least one premium generator action behind those credits, and adding a scan-friendly affiliate resources section.
 
 **Planned changes:**
-- Create a new onboarding UI (route or modal) with brief English copy describing the app and highlighting key sections: Generators, Trends, Library, Calendar.
-- Add primary and secondary actions (e.g., “Start Creating” and “Skip for now”) that both route the user to `/generators`.
-- Show onboarding only to authenticated users *after* profile setup is complete (i.e., only when `userProfile` is not null), and persist completion/dismissal in browser storage so it does not reappear.
-- Add an obvious way to re-open onboarding from an authenticated area (e.g., a small link/button), and document the browser storage key used in code.
-- Register onboarding navigation within the existing TanStack Router flow (update `frontend/src/App.tsx` only as needed for routing).
+- Add backend support for per-user unlock/credit state: fetch current state, grant credits on completed in-app ad watch, and (optionally) consume a credit when performing a premium unlock.
+- Add a frontend “Watch an ad to unlock” timed in-app flow that grants credits and handles loading/error states with English messaging.
+- Gate at least one clearly identified advanced/premium action in the Generators experience behind unlock credits, with a blocking prompt when credits are insufficient and an automatic retry after credits are earned.
+- Add an authenticated Monetization page section (“Affiliate Resources” or similar) that lists affiliate items (name, short description, outbound link) with an affiliate disclosure and links opening in a new tab using `rel="noopener noreferrer"`.
+- Centralize affiliate link definitions in a single maintainable frontend constant/list.
 
-**User-visible outcome:** First-time authenticated users who have completed profile setup see a brief onboarding screen once, can start creating or skip directly to Generators, and can later re-open onboarding via a link/button.
+**User-visible outcome:** Authenticated users can watch an in-app “ad” to earn persistent unlock credits, use those credits to access a premium generator action without navigating away after unlocking, and browse an “Affiliate Resources” section with disclosed outbound links that open in a new tab.

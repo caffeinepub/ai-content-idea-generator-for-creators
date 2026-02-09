@@ -1,7 +1,7 @@
 import { Link } from '@tanstack/react-router';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Sparkles, Wand2, TrendingUp, Calendar, Library, Zap, Target, Lightbulb } from 'lucide-react';
+import { Sparkles, Wand2, TrendingUp, Calendar, Library, Zap, Target, Lightbulb, DollarSign } from 'lucide-react';
 import { useCurrentUser } from '../hooks/useCurrentUser';
 
 export default function LandingPage() {
@@ -37,6 +37,11 @@ export default function LandingPage() {
       icon: Calendar,
       title: 'Content Calendar',
       description: 'Plan and schedule your content strategy with an intuitive calendar view.',
+    },
+    {
+      icon: DollarSign,
+      title: 'Monetization Tools',
+      description: 'Turn your content into revenue with offers, brand pitches, media kits, and revenue tracking.',
     },
   ];
 
@@ -104,6 +109,24 @@ export default function LandingPage() {
             </Card>
           ))}
         </div>
+      </section>
+
+      {/* Monetization Callout */}
+      <section className="text-center space-y-6 py-12 px-6 rounded-2xl bg-gradient-to-br from-accent/10 to-primary/10 border">
+        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent/20 text-accent-foreground text-sm font-medium">
+          <DollarSign className="h-4 w-4" />
+          New: Monetization Toolkit
+        </div>
+        <h2 className="text-3xl md:text-4xl font-bold">Turn Your Content Into Income</h2>
+        <p className="text-lg text-muted-foreground max-w-xl mx-auto">
+          Create service offers, pitch brands, build media kits, and track your revenue—all in one place.
+        </p>
+        <Button asChild size="lg" className="gap-2">
+          <Link to="/monetization">
+            <DollarSign className="h-5 w-5" />
+            Explore Monetization Tools
+          </Link>
+        </Button>
       </section>
 
       {/* CTA Section */}

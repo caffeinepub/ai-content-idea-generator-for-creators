@@ -1,7 +1,7 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-09T17:13:59.597Z",
+  "generatedAt": "2026-02-09T18:03:01.350Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
@@ -11,62 +11,71 @@
     "implemented": 3,
     "items": [
       {
-        "id": "REQ-10",
-        "summary": "Show the onboarding screen only for first-time users after they are authenticated and have completed profile setup; do not show it again once dismissed/completed.",
+        "id": "REQ-24",
+        "summary": "Implement a \"view-ads-to-unlock\" system that lets an authenticated user unlock premium/advanced outputs by completing an in-app ad-watching flow (no third-party ad network required). The system must track a per-user unlock balance (credits) that persists across sessions.",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/lib/onboardingStorage.ts",
-          "frontend/src/components/onboarding/OnboardingAutoLauncher.tsx",
-          "frontend/src/components/layout/AppLayout.tsx",
-          "frontend/src/pages/OnboardingPage.tsx"
+          "frontend/src/hooks/useQueries.ts",
+          "frontend/src/components/ads/WatchAdDialog.tsx",
+          "frontend/src/pages/GeneratorsPage.tsx"
         ],
         "matchedFiles": [
-          "frontend/src/lib/onboardingStorage.ts",
-          "frontend/src/components/onboarding/OnboardingAutoLauncher.tsx",
-          "frontend/src/components/layout/AppLayout.tsx",
-          "frontend/src/pages/OnboardingPage.tsx"
+          "frontend/src/hooks/useQueries.ts",
+          "frontend/src/components/ads/WatchAdDialog.tsx",
+          "frontend/src/pages/GeneratorsPage.tsx"
         ]
       },
       {
-        "id": "REQ-11",
-        "summary": "Wire onboarding navigation into the existing TanStack Router flow so the user can proceed to core app areas (at minimum, Generators).",
+        "id": "REQ-25",
+        "summary": "Add premium gating that uses the ad-unlock credits: when the user attempts to access an advanced/premium action, the app must either (a) allow it if the user has sufficient unlock credits or (b) prompt the user to watch an ad to earn credits and then retry the action after credits are granted.",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/App.tsx",
-          "frontend/src/pages/OnboardingPage.tsx"
+          "frontend/src/components/generators/CaptionGenerator.tsx",
+          "frontend/src/components/ads/usePremiumGate.ts",
+          "frontend/src/components/ads/WatchAdDialog.tsx"
         ],
         "matchedFiles": [
-          "frontend/src/App.tsx",
-          "frontend/src/pages/OnboardingPage.tsx"
+          "frontend/src/components/generators/CaptionGenerator.tsx",
+          "frontend/src/components/ads/usePremiumGate.ts",
+          "frontend/src/components/ads/WatchAdDialog.tsx"
         ]
       },
       {
-        "id": "REQ-9",
-        "summary": "Add a simple onboarding screen that introduces the app and guides first-time users to the main tools.",
+        "id": "REQ-26",
+        "summary": "Add affiliate link placements inside the authenticated Monetization section: provide a dedicated area that lists recommended tools/resources with outbound affiliate links and an affiliate disclosure. The list must be easy to scan and each item must support opening the link in a new tab.",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/pages/OnboardingPage.tsx",
-          "frontend/src/components/onboarding/OnboardingSectionList.tsx"
+          "frontend/src/lib/affiliateResources.ts",
+          "frontend/src/components/monetization/AffiliateResourcesSection.tsx",
+          "frontend/src/pages/MonetizationPage.tsx"
         ],
         "matchedFiles": [
-          "frontend/src/pages/OnboardingPage.tsx",
-          "frontend/src/components/onboarding/OnboardingSectionList.tsx"
+          "frontend/src/lib/affiliateResources.ts",
+          "frontend/src/components/monetization/AffiliateResourcesSection.tsx",
+          "frontend/src/pages/MonetizationPage.tsx"
         ]
       }
     ]
   },
   "changedFiles": [
+    "backend/main.mo",
+    "backend/migration.mo",
     "build-request.json",
-    "build-template/README.md",
     "feature_evidence.json",
     "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
-    "frontend/src/App.tsx",
-    "frontend/src/components/layout/AppLayout.tsx",
-    "frontend/src/components/onboarding/OnboardingAutoLauncher.tsx",
-    "frontend/src/components/onboarding/OnboardingSectionList.tsx",
-    "frontend/src/lib/onboardingStorage.ts",
-    "frontend/src/pages/OnboardingPage.tsx",
+    "frontend/src/backend.d.ts",
+    "frontend/src/backend.ts",
+    "frontend/src/components/ads/WatchAdDialog.tsx",
+    "frontend/src/components/ads/usePremiumGate.ts",
+    "frontend/src/components/generators/CaptionGenerator.tsx",
+    "frontend/src/components/monetization/AffiliateResourcesSection.tsx",
+    "frontend/src/declarations/backend.did.d.ts",
+    "frontend/src/declarations/backend.did.js",
+    "frontend/src/hooks/useQueries.ts",
+    "frontend/src/lib/affiliateResources.ts",
+    "frontend/src/pages/GeneratorsPage.tsx",
+    "frontend/src/pages/MonetizationPage.tsx",
     "project_state.json",
     "scratch/component-selection.json",
     "spec.md",

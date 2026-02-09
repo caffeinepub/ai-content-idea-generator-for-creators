@@ -2,11 +2,12 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-add-a-simple-onboarding-screen-that-introduces-the-app-and-guides-first-time-users-to-the-main-tools",
-      "featureTitle": "Add a simple onboarding screen that introduces the app and guides first-time users to the main tools.",
+      "featureId": "feature-implement-a-view-ads-to-unlock-system-that-lets-an-authenticated-user-unlock-premium-advanced-outputs-by-completing-an-in-app-ad-watching-flow-no-third-party-ad-network-required-the-system-must-track-a-per-user-unlock-balance-credits-that-persists-across-sessions",
+      "featureTitle": "Implement a \"view-ads-to-unlock\" system that lets an authenticated user unlock premium/advanced outputs by completing an in-app ad-watching flow (no third-party ad network required). The system must track a per-user unlock balance (credits) that persists across sessions.",
       "files": [
-        "frontend/src/components/onboarding/OnboardingSectionList.tsx",
-        "frontend/src/pages/OnboardingPage.tsx"
+        "frontend/src/components/ads/WatchAdDialog.tsx",
+        "frontend/src/hooks/useQueries.ts",
+        "frontend/src/pages/GeneratorsPage.tsx"
       ],
       "components": [
         "authorization@4.0.0",
@@ -17,18 +18,17 @@
         "github-export-icp-cli@1.0.0"
       ],
       "testIds": [
-        "REQ-9"
+        "REQ-24"
       ],
       "confidence": "high"
     },
     {
-      "featureId": "feature-show-the-onboarding-screen-only-for-first-time-users-after-they-are-authenticated-and-have-completed-profile-setup-do-not-show-it-again-once-dismissed-completed",
-      "featureTitle": "Show the onboarding screen only for first-time users after they are authenticated and have completed profile setup; do not show it again once dismissed/completed.",
+      "featureId": "feature-add-premium-gating-that-uses-the-ad-unlock-credits-when-the-user-attempts-to-access-an-advanced-premium-action-the-app-must-either-a-allow-it-if-the-user-has-sufficient-unlock-credits-or-b-prompt-the-user-to-watch-an-ad-to-earn-credits-and-then-retry-the-action-after-credits-are-granted",
+      "featureTitle": "Add premium gating that uses the ad-unlock credits: when the user attempts to access an advanced/premium action, the app must either (a) allow it if the user has sufficient unlock credits or (b) prompt the user to watch an ad to earn credits and then retry the action after credits are granted.",
       "files": [
-        "frontend/src/components/layout/AppLayout.tsx",
-        "frontend/src/components/onboarding/OnboardingAutoLauncher.tsx",
-        "frontend/src/lib/onboardingStorage.ts",
-        "frontend/src/pages/OnboardingPage.tsx"
+        "frontend/src/components/ads/WatchAdDialog.tsx",
+        "frontend/src/components/ads/usePremiumGate.ts",
+        "frontend/src/components/generators/CaptionGenerator.tsx"
       ],
       "components": [
         "authorization@4.0.0",
@@ -39,16 +39,17 @@
         "github-export-icp-cli@1.0.0"
       ],
       "testIds": [
-        "REQ-10"
+        "REQ-25"
       ],
       "confidence": "high"
     },
     {
-      "featureId": "feature-wire-onboarding-navigation-into-the-existing-tanstack-router-flow-so-the-user-can-proceed-to-core-app-areas-at-minimum-generators",
-      "featureTitle": "Wire onboarding navigation into the existing TanStack Router flow so the user can proceed to core app areas (at minimum, Generators).",
+      "featureId": "feature-add-affiliate-link-placements-inside-the-authenticated-monetization-section-provide-a-dedicated-area-that-lists-recommended-tools-resources-with-outbound-affiliate-links-and-an-affiliate-disclosure-the-list-must-be-easy-to-scan-and-each-item-must-support-opening-the-link-in-a-new-tab",
+      "featureTitle": "Add affiliate link placements inside the authenticated Monetization section: provide a dedicated area that lists recommended tools/resources with outbound affiliate links and an affiliate disclosure. The list must be easy to scan and each item must support opening the link in a new tab.",
       "files": [
-        "frontend/src/App.tsx",
-        "frontend/src/pages/OnboardingPage.tsx"
+        "frontend/src/components/monetization/AffiliateResourcesSection.tsx",
+        "frontend/src/lib/affiliateResources.ts",
+        "frontend/src/pages/MonetizationPage.tsx"
       ],
       "components": [
         "authorization@4.0.0",
@@ -59,7 +60,7 @@
         "github-export-icp-cli@1.0.0"
       ],
       "testIds": [
-        "REQ-11"
+        "REQ-26"
       ],
       "confidence": "high"
     }

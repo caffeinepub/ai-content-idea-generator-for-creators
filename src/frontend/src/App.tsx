@@ -8,6 +8,8 @@ import LibraryPage from './pages/LibraryPage';
 import CalendarPage from './pages/CalendarPage';
 import TrendsPage from './pages/TrendsPage';
 import OnboardingPage from './pages/OnboardingPage';
+import SettingsPage from './pages/SettingsPage';
+import MonetizationPage from './pages/MonetizationPage';
 import AuthGuard from './components/auth/AuthGuard';
 import ProfileSetupModal from './components/profile/ProfileSetupModal';
 import OnboardingAutoLauncher from './components/onboarding/OnboardingAutoLauncher';
@@ -84,6 +86,26 @@ const trendsRoute = createRoute({
   ),
 });
 
+const settingsRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/settings',
+  component: () => (
+    <AuthGuard>
+      <SettingsPage />
+    </AuthGuard>
+  ),
+});
+
+const monetizationRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/monetization',
+  component: () => (
+    <AuthGuard>
+      <MonetizationPage />
+    </AuthGuard>
+  ),
+});
+
 const routeTree = rootRoute.addChildren([
   landingRoute,
   onboardingRoute,
@@ -91,6 +113,8 @@ const routeTree = rootRoute.addChildren([
   libraryRoute,
   calendarRoute,
   trendsRoute,
+  settingsRoute,
+  monetizationRoute,
 ]);
 
 const router = createRouter({ routeTree });

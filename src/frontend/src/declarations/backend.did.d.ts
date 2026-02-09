@@ -10,6 +10,18 @@ import type { ActorMethod } from '@icp-sdk/core/agent';
 import type { IDL } from '@icp-sdk/core/candid';
 import type { Principal } from '@icp-sdk/core/principal';
 
+export interface BrandPitch {
+  'id' : bigint,
+  'followUpMessages' : Array<string>,
+  'shortPitchDM' : string,
+  'createdAt' : bigint,
+  'lastUpdated' : bigint,
+  'brandName' : string,
+  'desiredOutcome' : string,
+  'emailPitch' : string,
+  'collaborationType' : string,
+  'product' : string,
+}
 export interface CalendarPost {
   'id' : bigint,
   'postTime' : bigint,
@@ -67,10 +79,55 @@ export type HookType = { 'trend' : null } |
   { 'nostalgia' : null } |
   { 'authority' : null } |
   { 'contrarian' : null };
+export interface MediaKit {
+  'id' : bigint,
+  'contentPillars' : Array<string>,
+  'handles' : Array<string>,
+  'createdAt' : bigint,
+  'lastUpdated' : bigint,
+  'contentNiches' : Array<string>,
+  'contactEmail' : string,
+  'userProfile' : UserProfile,
+  'audienceDescription' : string,
+  'sampleDeliverables' : Array<string>,
+}
+export interface MonetizationOffer {
+  'id' : bigint,
+  'cta' : string,
+  'title' : string,
+  'targetCustomer' : string,
+  'createdAt' : bigint,
+  'lastUpdated' : bigint,
+  'priceRange' : string,
+  'deliverables' : Array<string>,
+  'fulfillmentNotes' : string,
+  'problemSolved' : string,
+}
 export type PostStatus = { 'scheduled' : null } |
   { 'published' : null } |
   { 'draft' : null } |
   { 'archived' : null };
+export interface RevenueEntry {
+  'id' : bigint,
+  'date' : string,
+  'createdAt' : bigint,
+  'sourceType' : RevenueSourceType,
+  'notes' : string,
+  'amount' : number,
+}
+export interface RevenueGoal {
+  'id' : bigint,
+  'month' : string,
+  'goalAmount' : number,
+  'achievedAmount' : number,
+  'createdAt' : bigint,
+  'lastUpdated' : bigint,
+}
+export type RevenueSourceType = { 'service' : null } |
+  { 'other' : string } |
+  { 'brand' : null } |
+  { 'affiliate' : null } |
+  { 'product' : null };
 export interface StoryIdea {
   'id' : bigint,
   'endGoal' : string,
@@ -165,22 +222,60 @@ export interface VideoIdea {
 }
 export interface _SERVICE {
   '_initializeAccessControlWithSecret' : ActorMethod<[string], undefined>,
+  'addCredits' : ActorMethod<[Principal, bigint], undefined>,
   'assignCallerUserRole' : ActorMethod<[Principal, UserRole], undefined>,
+  'getAllMonetizationOffers' : ActorMethod<
+    [Principal],
+    Array<MonetizationOffer>
+  >,
+  'getBrandPitch' : ActorMethod<[Principal, bigint], [] | [BrandPitch]>,
+  'getBrandPitchesForUser' : ActorMethod<[Principal], Array<BrandPitch>>,
   'getCallerUserProfile' : ActorMethod<[], [] | [UserProfile]>,
   'getCallerUserRole' : ActorMethod<[], UserRole>,
+  'getCredits' : ActorMethod<[], bigint>,
+  'getMediaKit' : ActorMethod<[Principal, bigint], [] | [MediaKit]>,
+  'getMediaKitsForUser' : ActorMethod<[Principal], Array<MediaKit>>,
+  'getMonetizationOffer' : ActorMethod<
+    [Principal, bigint],
+    [] | [MonetizationOffer]
+  >,
+  'getMonetizationOffersForUser' : ActorMethod<
+    [Principal],
+    Array<MonetizationOffer>
+  >,
+  'getRevenueEntry' : ActorMethod<[Principal, bigint], [] | [RevenueEntry]>,
+  'getRevenueGoal' : ActorMethod<[Principal, bigint], [] | [RevenueGoal]>,
+  'getRevenueGoalsForUser' : ActorMethod<[Principal], Array<RevenueGoal>>,
+  'getUserBrandPitches' : ActorMethod<[], Array<BrandPitch>>,
   'getUserCalendarPosts' : ActorMethod<[], Array<CalendarPost>>,
+  'getUserMediaKits' : ActorMethod<[], Array<MediaKit>>,
+  'getUserMonetizationOffers' : ActorMethod<[], Array<MonetizationOffer>>,
   'getUserProfile' : ActorMethod<[Principal], [] | [UserProfile]>,
+  'getUserRevenueEntries' : ActorMethod<[], Array<RevenueEntry>>,
+  'getUserRevenueGoals' : ActorMethod<[], Array<RevenueGoal>>,
   'getUserStoryIdeas' : ActorMethod<[], Array<StoryIdea>>,
   'getUserTrends' : ActorMethod<[], Array<Trend>>,
   'getUserVideoHooks' : ActorMethod<[], Array<VideoHook>>,
   'getUserVideoIdeas' : ActorMethod<[], Array<VideoIdea>>,
   'isCallerAdmin' : ActorMethod<[], boolean>,
+  'saveBrandPitch' : ActorMethod<[BrandPitch], undefined>,
   'saveCalendarPost' : ActorMethod<[CalendarPost], undefined>,
   'saveCallerUserProfile' : ActorMethod<[UserProfile], undefined>,
+  'saveMediaKit' : ActorMethod<[MediaKit], undefined>,
+  'saveMonetizationOffer' : ActorMethod<[MonetizationOffer], undefined>,
+  'saveRevenueEntry' : ActorMethod<[RevenueEntry], undefined>,
+  'saveRevenueGoal' : ActorMethod<[RevenueGoal], undefined>,
   'saveStoryIdea' : ActorMethod<[StoryIdea], undefined>,
   'saveTrend' : ActorMethod<[Trend], undefined>,
   'saveVideoHook' : ActorMethod<[VideoHook], undefined>,
   'saveVideoIdea' : ActorMethod<[VideoIdea], undefined>,
+  'updateBrandPitch' : ActorMethod<[bigint, BrandPitch], undefined>,
+  'updateMediaKit' : ActorMethod<[bigint, MediaKit], undefined>,
+  'updateMonetizationOffer' : ActorMethod<
+    [bigint, MonetizationOffer],
+    undefined
+  >,
+  'updateRevenueGoal' : ActorMethod<[bigint, RevenueGoal], undefined>,
 }
 export declare const idlService: IDL.ServiceClass;
 export declare const idlInitArgs: IDL.Type[];

@@ -1,80 +1,86 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "First-time user onboarding (route + persistence + navigation)",
+  "title": "Ad-based unlock credits and affiliate resources (frontend-only)",
   "requirements": [
     {
-      "id": "REQ-9",
-      "summary": "Create an onboarding UI that introduces the app and highlights Generators, Trends, Library, and Calendar with clear primary/secondary actions.",
+      "id": "REQ-24",
+      "summary": "Add an in-app 'watch ad to earn unlock credits' flow for authenticated users, showing and updating a persisted per-user credit balance via existing backend calls.",
       "acceptanceCriteria": [
-        "A new onboarding UI exists (page or modal) that briefly explains what the app does and highlights the key sections (Generators, Trends, Library, Calendar).",
-        "All user-facing onboarding text is in English.",
-        "The onboarding UI includes clear primary and secondary actions (e.g., “Start Creating” and “Skip for now”)."
+        "Frontend provides a clear UI flow to 'Watch an ad to unlock' that completes after a short timed 'ad' experience and then grants at least 1 credit.",
+        "Unlock/credit state is scoped to the authenticated principal and persists after refresh/relogin.",
+        "User-facing text is in English.",
+        "No third-party ad SDK or external ad provider integration is required or used."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/pages/OnboardingPage.tsx",
-          "operation": "create",
-          "description": "Add a dedicated onboarding page UI using existing shadcn/ui primitives (compose Card/Button/etc; do not modify files under frontend/src/components/ui). Include English copy that explains the app and highlights Generators/Trends/Library/Calendar, plus clear primary (e.g., Start Creating) and secondary (e.g., Skip for now) actions. Verify the component's usage instructions before implementing."
+          "path": "frontend/src/hooks/useQueries.ts",
+          "operation": "modify",
+          "description": "Add React Query wrappers for the existing credit capabilities (e.g., fetch current credit balance and grant credits after a completed in-app ad flow). Use the selected authorization component’s authenticated actor/identity model to ensure credit calls are performed only for logged-in users. Verify the component's usage instructions before implementing."
         },
         {
-          "path": "frontend/src/components/onboarding/OnboardingSectionList.tsx",
+          "path": "frontend/src/components/ads/WatchAdDialog.tsx",
           "operation": "create",
-          "description": "Create a small presentational component used by OnboardingPage to render the four key sections (Generators, Trends, Library, Calendar) consistently (icons/labels/descriptions) using existing shadcn/ui components. Verify the component's usage instructions before implementing."
+          "description": "Create a reusable 'Watch Ad to Earn Credits' dialog/modal that runs a short timed, fully in-app ad experience (no external ad network), then triggers the grant-credits mutation and shows success/error states in English. Use shadcn-ui primitives already present in the repo (e.g., Dialog/Buttons) for consistent UI. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/GeneratorsPage.tsx",
+          "operation": "modify",
+          "description": "Surface the current unlock credit balance somewhere clearly visible within the Generators experience (e.g., near the page header), including a 'Watch an ad' entry point that opens the WatchAdDialog. Verify the component's usage instructions before implementing."
         }
       ]
     },
     {
-      "id": "REQ-10",
-      "summary": "Gate onboarding to first-time authenticated users only after profile setup, persist completion in browser storage, and provide a way to reopen it.",
+      "id": "REQ-25",
+      "summary": "Gate at least one advanced Generators action behind unlock credits, prompting users to watch an in-app ad if they have insufficient credits and retrying the blocked action after credits are granted.",
       "acceptanceCriteria": [
-        "Unauthenticated users do not see the onboarding screen.",
-        "Users who still need to complete ProfileSetupModal do not see the onboarding screen until after the profile is saved and the profile is available (i.e., userProfile is not null).",
-        "After the user completes or skips onboarding, the onboarding screen does not appear again on subsequent visits (persisted via browser storage).",
-        "There is an obvious way to re-open onboarding (e.g., a small “Onboarding” link/button in an existing authenticated area such as a settings/help spot or footer), or the completion state can be reset by clearing browser storage (document which key is used in code)."
+        "At least one clearly identified advanced/premium action in the Generators experience is gated behind unlock credits (e.g., revealing an extended output variant, exporting/copying an extended version, or generating additional variants beyond the default).",
+        "If the user has no credits, the UI presents a blocking prompt explaining they can watch an ad to unlock, with a clear cancel path.",
+        "After completing the watch-ad flow and receiving credits, the user can complete the previously blocked action without needing to navigate away.",
+        "UI states handle loading and error cases (e.g., failed credit grant) with an English error message."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/lib/onboardingStorage.ts",
-          "operation": "create",
-          "description": "Implement local browser storage helpers for onboarding completion (get/set/reset). Document the exact storage key used in code comments (for manual reset via clearing browser storage) and keep logic frontend-only (no backend state)."
-        },
-        {
-          "path": "frontend/src/components/onboarding/OnboardingAutoLauncher.tsx",
-          "operation": "create",
-          "description": "Add a small component that uses the app's auth/profile state (useCurrentUser from the authorization system) to automatically send first-time users to onboarding only when: authenticated, profile is fetched, and userProfile is not null, and onboarding is not yet completed. Ensure it does nothing for unauthenticated users or while ProfileSetupModal should be shown. Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/components/layout/AppLayout.tsx",
+          "path": "frontend/src/components/generators/CaptionGenerator.tsx",
           "operation": "modify",
-          "description": "Add an authenticated-only, unobtrusive 'Onboarding' link/button in an existing authenticated area (e.g., footer) that navigates to the onboarding route to re-open onboarding. Keep public layout accessible and do not require onboarding to access the link target beyond existing auth/profile gating."
+          "description": "Introduce a clearly labeled premium/advanced action (e.g., 'Copy Extended Caption Pack' or 'Generate Extra Variants') that requires >= 1 unlock credit. If insufficient credits, present a blocking prompt with cancel that opens the WatchAdDialog; on successful credit grant, automatically retry the originally blocked action in-place. Handle loading/error states with English messaging. Verify the component's usage instructions before implementing."
         },
         {
-          "path": "frontend/src/pages/OnboardingPage.tsx",
+          "path": "frontend/src/components/ads/usePremiumGate.ts",
+          "operation": "create",
+          "description": "Create a small helper hook/util to orchestrate premium gating: check current credit balance, open the WatchAdDialog when needed, and execute a deferred callback after credits are successfully granted (to support 'retry without navigating away'). Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/ads/WatchAdDialog.tsx",
           "operation": "modify",
-          "description": "Wire the page actions to set onboarding completion in browser storage on 'Start Creating' and 'Skip for now', then navigate to the authenticated destination. Include an optional 'Reset onboarding' affordance only if appropriate for the UI, otherwise rely on documented browser storage key reset."
+          "description": "Extend the WatchAdDialog to support the premium-gate retry flow (e.g., accept an onCreditsGranted callback and expose cancel/close behavior), and to surface grant-credit errors in English without leaving the current page. Verify the component's usage instructions before implementing."
         }
       ]
     },
     {
-      "id": "REQ-11",
-      "summary": "Register onboarding in TanStack Router and ensure actions navigate to /generators without touching immutable paths.",
+      "id": "REQ-26",
+      "summary": "Add an authenticated-only Affiliate Resources area in the Monetization section with disclosure and maintainable outbound affiliate links opening in a new tab.",
       "acceptanceCriteria": [
-        "If implemented as a route: a new route is registered in the router (frontend/src/App.tsx) and can be navigated to without errors.",
-        "Onboarding primary action takes the user to /generators.",
-        "Onboarding skip/done action also lands the user in a sensible authenticated destination (at minimum /generators).",
-        "No changes are made to immutable frontend paths (identity/actor hooks and shadcn ui sources)."
+        "The Monetization page includes an \"Affiliate Resources\" (or similarly named) section visible to authenticated users.",
+        "The section includes an English affiliate disclosure (e.g., 'Some links may be affiliate links and we may earn a commission at no extra cost to you.').",
+        "Each affiliate item shows at minimum: name, short description, and a button/link that opens in a new tab with rel=\"noopener noreferrer\".",
+        "Affiliate links are defined in a single, maintainable place in the frontend (e.g., a small constant list), so they can be edited without touching multiple components."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/App.tsx",
-          "operation": "modify",
-          "description": "Register a new TanStack Router route (e.g., /onboarding) and wrap it in AuthGuard so unauthenticated users never see it. Also mount the OnboardingAutoLauncher in the root layout so eligible first-time users are directed to onboarding after profile setup completes. Use the existing authorization flow (AuthGuard/useCurrentUser) and do not change immutable hook files or shadcn ui sources. Verify the component's usage instructions before implementing."
+          "path": "frontend/src/lib/affiliateResources.ts",
+          "operation": "create",
+          "description": "Define a single maintainable constant list of affiliate resources (name, short description, url, optional tags) to be rendered in the Monetization UI; keep all outbound URLs centralized here for easy edits. Verify the component's usage instructions before implementing."
         },
         {
-          "path": "frontend/src/pages/OnboardingPage.tsx",
+          "path": "frontend/src/components/monetization/AffiliateResourcesSection.tsx",
+          "operation": "create",
+          "description": "Create an 'Affiliate Resources' section component that renders the centralized list with a scan-friendly layout, includes an English affiliate disclosure, and ensures each item opens in a new tab with rel=\"noopener noreferrer\". Use shadcn-ui components already present (e.g., Card/Button) for consistent styling. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/MonetizationPage.tsx",
           "operation": "modify",
-          "description": "Ensure both primary and secondary actions navigate to /generators via TanStack Router navigation, and that the route renders without errors when navigated to directly (while still protected by AuthGuard + profile gating)."
+          "description": "Wire the AffiliateResourcesSection into the authenticated Monetization experience (e.g., on the Overview tab below existing content) so it is visible to logged-in users without adding new routes. Verify the component's usage instructions before implementing."
         }
       ]
     }

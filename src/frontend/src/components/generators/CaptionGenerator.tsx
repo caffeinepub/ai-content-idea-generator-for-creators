@@ -6,9 +6,12 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
-import { Sparkles, Copy, Save } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { Sparkles, Copy, Save, Crown } from 'lucide-react';
 import { generateCaptions } from '../../lib/captionGenerator';
 import { useSaveStoryIdea } from '../../hooks/useQueries';
+import { usePremiumGate } from '../ads/usePremiumGate';
+import WatchAdDialog from '../ads/WatchAdDialog';
 import { toast } from 'sonner';
 import type { StoryIdea } from '../../backend';
 
@@ -20,6 +23,7 @@ export default function CaptionGenerator() {
   const [captions, setCaptions] = useState<StoryIdea[]>([]);
   const [isGenerating, setIsGenerating] = useState(false);
   const saveCaption = useSaveStoryIdea();
+  const { hasCredits, showAdDialog, executeWithGate, handleCreditsGranted, handleDialogClose } = usePremiumGate();
 
   const handleGenerate = () => {
     if (!idea.trim()) {
@@ -55,110 +59,140 @@ export default function CaptionGenerator() {
     }
   };
 
+  const handleCopyExtended = (caption: StoryIdea) => {
+    executeWithGate(() => {
+      const extendedContent = `${caption.mainText}\n\n${caption.supportingPoints.join(' ')}\n\n✨ EXTENDED PACK ✨\n\nVariation 1: ${caption.mainText.replace(/\./g, '!')}\n\nVariation 2: ${caption.mainText.toUpperCase()}\n\nBonus CTA: ${caption.endGoal}`;
+      navigator.clipboard.writeText(extendedContent);
+      toast.success('Extended caption pack copied to clipboard!');
+    });
+  };
+
   return (
-    <div className="space-y-6">
-      <Card>
-        <CardHeader>
-          <CardTitle>Generate Captions</CardTitle>
-          <CardDescription>
-            Create engaging captions with hashtags and CTAs that drive action.
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="idea">Idea/Hook *</Label>
-            <Textarea
-              id="idea"
-              placeholder="Enter your content idea or hook..."
-              value={idea}
-              onChange={(e) => setIdea(e.target.value)}
-              rows={3}
-            />
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="keywords">Keywords (Optional)</Label>
-            <Input
-              id="keywords"
-              placeholder="e.g., fitness, motivation, transformation"
-              value={keywords}
-              onChange={(e) => setKeywords(e.target.value)}
-            />
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-4">
+    <>
+      <div className="space-y-6">
+        <Card>
+          <CardHeader>
+            <CardTitle>Generate Captions</CardTitle>
+            <CardDescription>
+              Create engaging captions with hashtags and CTAs that drive action.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="emoji">Emoji Density</Label>
-              <Select value={emojiDensity} onValueChange={setEmojiDensity}>
-                <SelectTrigger id="emoji">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="none">None</SelectItem>
-                  <SelectItem value="low">Low</SelectItem>
-                  <SelectItem value="medium">Medium</SelectItem>
-                  <SelectItem value="high">High</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="flex items-center justify-between space-x-2 pt-8">
-              <Label htmlFor="hashtags">Include Hashtags</Label>
-              <Switch
-                id="hashtags"
-                checked={includeHashtags}
-                onCheckedChange={setIncludeHashtags}
+              <Label htmlFor="idea">Idea/Hook *</Label>
+              <Textarea
+                id="idea"
+                placeholder="Enter your content idea or hook..."
+                value={idea}
+                onChange={(e) => setIdea(e.target.value)}
+                rows={3}
               />
             </div>
-          </div>
 
-          <Button onClick={handleGenerate} disabled={isGenerating} className="w-full gap-2">
-            <Sparkles className="h-4 w-4" />
-            {isGenerating ? 'Generating Captions...' : 'Generate Captions'}
-          </Button>
-        </CardContent>
-      </Card>
+            <div className="space-y-2">
+              <Label htmlFor="keywords">Keywords (Optional)</Label>
+              <Input
+                id="keywords"
+                placeholder="e.g., fitness, motivation, transformation"
+                value={keywords}
+                onChange={(e) => setKeywords(e.target.value)}
+              />
+            </div>
 
-      {captions.length > 0 && (
-        <div className="space-y-4">
-          <h3 className="text-lg font-semibold">Generated Captions ({captions.length})</h3>
-          {captions.map((caption) => (
-            <Card key={Number(caption.id)}>
-              <CardContent className="pt-6 space-y-3">
-                <p className="whitespace-pre-wrap">{caption.mainText}</p>
-                {caption.supportingPoints.length > 0 && (
-                  <p className="text-sm text-muted-foreground">{caption.supportingPoints.join(' ')}</p>
-                )}
-                <div className="flex items-center justify-between pt-2">
-                  <span className="text-xs text-muted-foreground">
-                    {caption.mainText.length} characters
-                  </span>
-                  <div className="flex gap-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => handleCopy(caption.mainText + '\n\n' + caption.supportingPoints.join(' '))}
-                      className="gap-2"
-                    >
-                      <Copy className="h-4 w-4" />
-                      Copy
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => handleSave(caption)}
-                      disabled={saveCaption.isPending}
-                      className="gap-2"
-                    >
-                      <Save className="h-4 w-4" />
-                      Save
-                    </Button>
+            <div className="grid md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="emoji">Emoji Density</Label>
+                <Select value={emojiDensity} onValueChange={setEmojiDensity}>
+                  <SelectTrigger id="emoji">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="none">None</SelectItem>
+                    <SelectItem value="low">Low</SelectItem>
+                    <SelectItem value="medium">Medium</SelectItem>
+                    <SelectItem value="high">High</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="flex items-center justify-between space-x-2 pt-8">
+                <Label htmlFor="hashtags">Include Hashtags</Label>
+                <Switch
+                  id="hashtags"
+                  checked={includeHashtags}
+                  onCheckedChange={setIncludeHashtags}
+                />
+              </div>
+            </div>
+
+            <Button onClick={handleGenerate} disabled={isGenerating} className="w-full gap-2">
+              <Sparkles className="h-4 w-4" />
+              {isGenerating ? 'Generating Captions...' : 'Generate Captions'}
+            </Button>
+          </CardContent>
+        </Card>
+
+        {captions.length > 0 && (
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold">Generated Captions ({captions.length})</h3>
+            {captions.map((caption) => (
+              <Card key={Number(caption.id)}>
+                <CardContent className="pt-6 space-y-3">
+                  <p className="whitespace-pre-wrap">{caption.mainText}</p>
+                  {caption.supportingPoints.length > 0 && (
+                    <p className="text-sm text-muted-foreground">{caption.supportingPoints.join(' ')}</p>
+                  )}
+                  <div className="flex items-center justify-between pt-2 flex-wrap gap-2">
+                    <span className="text-xs text-muted-foreground">
+                      {caption.mainText.length} characters
+                    </span>
+                    <div className="flex gap-2 flex-wrap">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleCopy(caption.mainText + '\n\n' + caption.supportingPoints.join(' '))}
+                        className="gap-2"
+                      >
+                        <Copy className="h-4 w-4" />
+                        Copy
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleCopyExtended(caption)}
+                        className="gap-2 relative"
+                      >
+                        <Crown className="h-4 w-4 text-amber-500" />
+                        Copy Extended Pack
+                        {!hasCredits && (
+                          <Badge variant="secondary" className="ml-1 text-xs">
+                            Watch Ad
+                          </Badge>
+                        )}
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleSave(caption)}
+                        disabled={saveCaption.isPending}
+                        className="gap-2"
+                      >
+                        <Save className="h-4 w-4" />
+                        Save
+                      </Button>
+                    </div>
                   </div>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      )}
-    </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        )}
+      </div>
+
+      <WatchAdDialog
+        open={showAdDialog}
+        onOpenChange={handleDialogClose}
+        onCreditsGranted={handleCreditsGranted}
+      />
+    </>
   );
 }

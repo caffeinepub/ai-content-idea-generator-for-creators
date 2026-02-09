@@ -1,80 +1,78 @@
 {
   "kind": "build_request",
-  "title": "Add a simple first-time user onboarding screen",
+  "title": "Add ad-based unlocks and affiliate link placements (non-Stripe monetization)",
   "priority": "normal",
   "requirements": [
     {
-      "id": "REQ-9",
-      "text": "Add a simple onboarding screen that introduces the app and guides first-time users to the main tools.",
-      "target": "frontend",
+      "id": "REQ-24",
+      "text": "Implement a \"view-ads-to-unlock\" system that lets an authenticated user unlock premium/advanced outputs by completing an in-app ad-watching flow (no third-party ad network required). The system must track a per-user unlock balance (credits) that persists across sessions.",
+      "target": "both",
       "source": {
         "messageIds": [
-          "msg-2",
-          "msg-3"
+          "msg-12"
         ],
         "quotes": [
-          "If you want, we can add a simple onboarding screen next.",
-          "Do it"
+          "Add second and third"
         ]
       },
       "acceptanceCriteria": [
-        "A new onboarding UI exists (page or modal) that briefly explains what the app does and highlights the key sections (Generators, Trends, Library, Calendar).",
-        "All user-facing onboarding text is in English.",
-        "The onboarding UI includes clear primary and secondary actions (e.g., “Start Creating” and “Skip for now”)."
+        "Backend exposes methods to: (1) get the caller's current unlock/credit state, (2) grant credits for a completed 'ad watch' event, and (3) optionally consume a credit when unlocking a premium output.",
+        "Unlock/credit state is scoped to the authenticated principal and persists after refresh/relogin.",
+        "Frontend provides a clear UI flow to 'Watch an ad to unlock' that completes after a short timed 'ad' experience and then grants at least 1 credit.",
+        "User-facing text is in English.",
+        "No third-party ad SDK or external ad provider integration is required or used."
       ]
     },
     {
-      "id": "REQ-10",
-      "text": "Show the onboarding screen only for first-time users after they are authenticated and have completed profile setup; do not show it again once dismissed/completed.",
+      "id": "REQ-25",
+      "text": "Add premium gating that uses the ad-unlock credits: when the user attempts to access an advanced/premium action, the app must either (a) allow it if the user has sufficient unlock credits or (b) prompt the user to watch an ad to earn credits and then retry the action after credits are granted.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-2",
-          "msg-3"
+          "msg-12"
         ],
         "quotes": [
-          "add a simple onboarding screen next.",
-          "Do it"
+          "Add second and third"
         ]
       },
       "acceptanceCriteria": [
-        "Unauthenticated users do not see the onboarding screen.",
-        "Users who still need to complete ProfileSetupModal do not see the onboarding screen until after the profile is saved and the profile is available (i.e., userProfile is not null).",
-        "After the user completes or skips onboarding, the onboarding screen does not appear again on subsequent visits (persisted via browser storage).",
-        "There is an obvious way to re-open onboarding (e.g., a small “Onboarding” link/button in an existing authenticated area such as a settings/help spot or footer), or the completion state can be reset by clearing browser storage (document which key is used in code)."
+        "At least one clearly identified advanced/premium action in the Generators experience is gated behind unlock credits (e.g., revealing an extended output variant, exporting/copying an extended version, or generating additional variants beyond the default).",
+        "If the user has no credits, the UI presents a blocking prompt explaining they can watch an ad to unlock, with a clear cancel path.",
+        "After completing the watch-ad flow and receiving credits, the user can complete the previously blocked action without needing to navigate away.",
+        "UI states handle loading and error cases (e.g., failed credit grant) with an English error message."
       ]
     },
     {
-      "id": "REQ-11",
-      "text": "Wire onboarding navigation into the existing TanStack Router flow so the user can proceed to core app areas (at minimum, Generators).",
+      "id": "REQ-26",
+      "text": "Add affiliate link placements inside the authenticated Monetization section: provide a dedicated area that lists recommended tools/resources with outbound affiliate links and an affiliate disclosure. The list must be easy to scan and each item must support opening the link in a new tab.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-2",
-          "msg-3"
+          "msg-12"
         ],
         "quotes": [
-          "add a simple onboarding screen next.",
-          "Do it"
+          "Add second and third"
         ]
       },
       "acceptanceCriteria": [
-        "If implemented as a route: a new route is registered in the router (frontend/src/App.tsx) and can be navigated to without errors.",
-        "Onboarding primary action takes the user to /generators.",
-        "Onboarding skip/done action also lands the user in a sensible authenticated destination (at minimum /generators).",
-        "No changes are made to immutable frontend paths (identity/actor hooks and shadcn ui sources)."
+        "The Monetization page includes an \"Affiliate Resources\" (or similarly named) section visible to authenticated users.",
+        "The section includes an English affiliate disclosure (e.g., 'Some links may be affiliate links and we may earn a commission at no extra cost to you.').",
+        "Each affiliate item shows at minimum: name, short description, and a button/link that opens in a new tab with rel=\"noopener noreferrer\".",
+        "Affiliate links are defined in a single, maintainable place in the frontend (e.g., a small constant list), so they can be edited without touching multiple components."
       ]
     }
   ],
   "constraints": [
-    "Do not edit files under frontend/src/components/ui (compose existing shadcn components instead).",
-    "Do not edit immutable hook files: frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useInternetIdentity.tsx, frontend/src/hooks/useActor.ts, frontend/src/main.tsx.",
-    "Keep all changes within the existing React + TypeScript + Tailwind + React Query + TanStack Router stack."
+    "Backend must remain a single Motoko actor in backend/main.mo; do not introduce additional backend services.",
+    "Generate backend/migration.mo changes only if required by persisted state changes (conditional migration policy).",
+    "Do not edit files under frontend/src/components/ui or any other immutable paths listed in SYSTEM_CONTEXT.",
+    "Do not add Stripe or any external payment integration.",
+    "Do not integrate third-party ad networks/SDKs; the 'ad' experience must be implemented fully in-app."
   ],
   "nonGoals": [
-    "Do not add new backend storage or Motoko state for onboarding completion.",
-    "Do not implement email capture, notifications, payments, or any third-party integrations as part of onboarding.",
-    "Do not redesign existing generators/trends/library/calendar features beyond what is necessary to link from onboarding."
+    "Implementing real subscription billing ($5.9/month) or paywall checkout flows.",
+    "Implementing real ad network inventory, ad serving, or ad revenue reporting.",
+    "Implementing a full affiliate tracking system with conversions/attribution; only outbound link placement and disclosure are required."
   ],
   "imageRequirements": {
     "required": [],

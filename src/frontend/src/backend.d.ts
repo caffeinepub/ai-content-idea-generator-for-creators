@@ -27,14 +27,17 @@ export interface VideoIdea {
     objectives: string;
     editingTips: string;
 }
-export interface VideoHook {
+export interface StoryIdea {
     id: bigint;
-    content: string;
-    performanceRating?: bigint;
-    difficulty: Difficulty;
+    endGoal: string;
+    deliveryStyle: ContentStyle;
+    supportingPoints: Array<string>;
     createdAt: bigint;
-    videoCategory: ContentCategory;
-    hookType: HookType;
+    audience: string;
+    engagementRate?: bigint;
+    mainText: string;
+    conversionRate?: bigint;
+    hookId: bigint;
     isViral: boolean;
     trendId: bigint;
     videoId: bigint;
@@ -82,34 +85,82 @@ export type TrendCategory = {
     __kind__: "format";
     format: null;
 };
-export interface Trend {
+export interface MediaKit {
     id: bigint;
+    contentPillars: Array<string>;
+    handles: Array<string>;
+    createdAt: bigint;
+    lastUpdated: bigint;
+    contentNiches: Array<string>;
+    contactEmail: string;
+    userProfile: UserProfile;
+    audienceDescription: string;
+    sampleDeliverables: Array<string>;
+}
+export interface MonetizationOffer {
+    id: bigint;
+    cta: string;
     title: string;
-    viralPotential: bigint;
+    targetCustomer: string;
+    createdAt: bigint;
+    lastUpdated: bigint;
+    priceRange: string;
+    deliverables: Array<string>;
+    fulfillmentNotes: string;
+    problemSolved: string;
+}
+export interface RevenueGoal {
+    id: bigint;
+    month: string;
+    goalAmount: number;
+    achievedAmount: number;
+    createdAt: bigint;
+    lastUpdated: bigint;
+}
+export interface RevenueEntry {
+    id: bigint;
+    date: string;
+    createdAt: bigint;
+    sourceType: RevenueSourceType;
+    notes: string;
+    amount: number;
+}
+export type RevenueSourceType = {
+    __kind__: "service";
+    service: null;
+} | {
+    __kind__: "other";
+    other: string;
+} | {
+    __kind__: "brand";
+    brand: null;
+} | {
+    __kind__: "affiliate";
+    affiliate: null;
+} | {
+    __kind__: "product";
+    product: null;
+};
+export interface BrandPitch {
+    id: bigint;
+    followUpMessages: Array<string>;
+    shortPitchDM: string;
+    createdAt: bigint;
+    lastUpdated: bigint;
+    brandName: string;
+    desiredOutcome: string;
+    emailPitch: string;
+    collaborationType: string;
+    product: string;
+}
+export interface VideoHook {
+    id: bigint;
+    content: string;
+    performanceRating?: bigint;
     difficulty: Difficulty;
     createdAt: bigint;
-    soundClip?: string;
-    description: string;
-    referenceVideos: Array<string>;
-    isActive: boolean;
-    relevanceScore: bigint;
-    trendScore: bigint;
-    category: TrendCategory;
-    analyzedHashtagPerformance: Array<string>;
-    lastChecked: bigint;
-    trendAlertSource: string;
-}
-export interface StoryIdea {
-    id: bigint;
-    endGoal: string;
-    deliveryStyle: ContentStyle;
-    supportingPoints: Array<string>;
-    createdAt: bigint;
-    audience: string;
-    engagementRate?: bigint;
-    mainText: string;
-    conversionRate?: bigint;
-    hookId: bigint;
+    videoCategory: ContentCategory;
+    hookType: HookType;
     isViral: boolean;
     trendId: bigint;
     videoId: bigint;
@@ -148,6 +199,23 @@ export type HookType = {
     __kind__: "contrarian";
     contrarian: null;
 };
+export interface Trend {
+    id: bigint;
+    title: string;
+    viralPotential: bigint;
+    difficulty: Difficulty;
+    createdAt: bigint;
+    soundClip?: string;
+    description: string;
+    referenceVideos: Array<string>;
+    isActive: boolean;
+    relevanceScore: bigint;
+    trendScore: bigint;
+    category: TrendCategory;
+    analyzedHashtagPerformance: Array<string>;
+    lastChecked: bigint;
+    trendAlertSource: string;
+}
 export type ContentStyle = {
     __kind__: "qna";
     qna: null;
@@ -265,20 +333,46 @@ export enum UserRole {
     guest = "guest"
 }
 export interface backendInterface {
+    addCredits(user: Principal, amount: bigint): Promise<void>;
     assignCallerUserRole(user: Principal, role: UserRole): Promise<void>;
+    getAllMonetizationOffers(user: Principal): Promise<Array<MonetizationOffer>>;
+    getBrandPitch(user: Principal, pitchId: bigint): Promise<BrandPitch | null>;
+    getBrandPitchesForUser(user: Principal): Promise<Array<BrandPitch>>;
     getCallerUserProfile(): Promise<UserProfile | null>;
     getCallerUserRole(): Promise<UserRole>;
+    getCredits(): Promise<bigint>;
+    getMediaKit(user: Principal, kitId: bigint): Promise<MediaKit | null>;
+    getMediaKitsForUser(user: Principal): Promise<Array<MediaKit>>;
+    getMonetizationOffer(user: Principal, offerId: bigint): Promise<MonetizationOffer | null>;
+    getMonetizationOffersForUser(user: Principal): Promise<Array<MonetizationOffer>>;
+    getRevenueEntry(user: Principal, entryId: bigint): Promise<RevenueEntry | null>;
+    getRevenueGoal(user: Principal, goalId: bigint): Promise<RevenueGoal | null>;
+    getRevenueGoalsForUser(user: Principal): Promise<Array<RevenueGoal>>;
+    getUserBrandPitches(): Promise<Array<BrandPitch>>;
     getUserCalendarPosts(): Promise<Array<CalendarPost>>;
+    getUserMediaKits(): Promise<Array<MediaKit>>;
+    getUserMonetizationOffers(): Promise<Array<MonetizationOffer>>;
     getUserProfile(user: Principal): Promise<UserProfile | null>;
+    getUserRevenueEntries(): Promise<Array<RevenueEntry>>;
+    getUserRevenueGoals(): Promise<Array<RevenueGoal>>;
     getUserStoryIdeas(): Promise<Array<StoryIdea>>;
     getUserTrends(): Promise<Array<Trend>>;
     getUserVideoHooks(): Promise<Array<VideoHook>>;
     getUserVideoIdeas(): Promise<Array<VideoIdea>>;
     isCallerAdmin(): Promise<boolean>;
+    saveBrandPitch(pitch: BrandPitch): Promise<void>;
     saveCalendarPost(calendarPost: CalendarPost): Promise<void>;
     saveCallerUserProfile(profile: UserProfile): Promise<void>;
+    saveMediaKit(kit: MediaKit): Promise<void>;
+    saveMonetizationOffer(offer: MonetizationOffer): Promise<void>;
+    saveRevenueEntry(entry: RevenueEntry): Promise<void>;
+    saveRevenueGoal(goal: RevenueGoal): Promise<void>;
     saveStoryIdea(storyIdea: StoryIdea): Promise<void>;
     saveTrend(trend: Trend): Promise<void>;
     saveVideoHook(videoHook: VideoHook): Promise<void>;
     saveVideoIdea(videoIdea: VideoIdea): Promise<void>;
+    updateBrandPitch(pitchId: bigint, updatedPitch: BrandPitch): Promise<void>;
+    updateMediaKit(kitId: bigint, updatedKit: MediaKit): Promise<void>;
+    updateMonetizationOffer(offerId: bigint, updatedOffer: MonetizationOffer): Promise<void>;
+    updateRevenueGoal(goalId: bigint, updatedGoal: RevenueGoal): Promise<void>;
 }
